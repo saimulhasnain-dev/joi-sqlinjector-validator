@@ -48,7 +48,25 @@ $ import JOI from 'joi-sql-injector-validator';
 ## SQL Injection validation example
 
 ```tsx
-const Joi = = require("joi-sql-injector-validator");
+const JOI = require('joi-sql-injector-validator');
+
+const schema = JOI.string().sqlInjectionFilter();
+
+const validValue = 'This is a valid value';
+const invalidValue = 'SELECT * FROM users';
+
+const { error: validError, value: validOutput } = schema.validate(validValue);
+const { error: invalidError, value: invalidOutput } = schema.validate(invalidValue);
+
+console.log(validOutput); // Output: This is a valid value
+console.log(validError); // Output: undefined
+
+console.log(invalidOutput); // Output: undefined
+console.log(invalidError); // Output: ValidationError: String shouldn't contain any SQL injection commands
+```
+
+```tsx
+const JOI = require('joi-sql-injector-validator');
 
 const schema = Joi.object()
   .keys({
@@ -77,7 +95,8 @@ const schema = Joi.object()
 ## Other Examples
 
 ```tsx
-import JOI from 'joi-sql-injector-validator';
+const JOI = require('joi-sql-injector-validator');
+
 
 const schema = JOI.object({
     username: JOI.string()
