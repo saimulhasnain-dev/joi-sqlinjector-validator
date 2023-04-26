@@ -1,6 +1,6 @@
 This is a lightweight npm library designed to validate SQL injection attacks in user input
 ![npm version](https://img.shields.io/npm/v/input-validator?color=green&label=npm&style=flat-square)
-![size](https://img.shields.io/bundlephobia/min/@saimulhasnain-dev/input-validator)
+![size](https://img.shields.io/bundlephobia/min/joi-sqlinjector-validator)
 
 # joi-sqlinjector-validator
 > Joi SQL Injection Validator is a lightweight npm library designed to validate SQL injection attacks in user input using Joi, a popular validation library for Node.js. This library provides a set of pre-built Joi validation schemas for various types of user input such as strings, numbers, dates, and arrays that can be easily integrated into any Node.js project.
@@ -22,6 +22,13 @@ v8.16.0
 
 These instructions will help you to install this package in your project to perform data validation.
 
+## How to use
+
+```tsx
+This **joi-sqlinjector-validator** package includes all available validation method which is available here 
+JOI Official doc- https://joi.dev/api/?v=17.9.1  
+along with more powerful validation sqlInjectionFilter() for avoiding SQL Injection attacks
+```
 ## Installation
 
 **BEFORE YOU INSTALL:** please read the [prerequisites](#prerequisites)
@@ -37,79 +44,110 @@ After successful installation of package you need to import package in your file
 To import complete package in once
 
 ```sh
-$ import validator from '@saimulhasnain-dev/input-validator';
+$ import JOI from 'joi-sqlinjector-validator';
 ```
-
-Or if you prefer using any particular function then:
-
-```sh
-$ import { isAlphabet } from '@saimulhasnain-dev/input-validator';
-```
-
-## Examples
+## SQL Injection validation example
 
 ```tsx
-import validator from '@saimulhasnain-dev/input-validator';
+const Joi = = require("joi-sqlinjector-validator");
 
-let res = validator.isAlphabet('abc');//to verify string contains alphabet
-console.log(res); // it will print `true` as it contains alphabet
+const schema = Joi.object()
+  .keys({
+    name: Joi.string()
+    .sqlInjectionFilter()
+      .min(3)
+      .max(40)
+      .required(),
+    age: Joi.number()
+      .integer()
+      .min(16)
+  });
 
-validator.isStrongPassword('Qwert@!2313');//to check password strength
-
+  const {
+    error
+  } = schema.validate({name:"test OR 1=1; DROP users;", age:15});
+  if (error) {
+    //It will give error "String shouldn't contain any SQL injection commands"
+   console.log("validation error", error.details)
+  } else {
+    console.log("validation passed")
+  }
 ```
-Accessing only required function
+
+
+## Other Examples
 
 ```tsx
-import { isValidEmail } from '@saimulhasnain-dev/input-validator';
-isValidEmail('abc@gmail.com');//to test email is valid or not
+import JOI from 'joi-sqlinjector-validator';
 
-```
-```tsx
-import { getValueFromObject, isKeyExistsNested } from '@saimulhasnain-dev/input-validator';
-const user = {
-    name: "abc",
-    email: "xyz@email.com",
-    address: {
-        state: "New york",
-        country: "USA",
-        phones: {
-            primary: "+1234567890",
-            secondary: "+0987654321"
-        }
-    }
+const schema = JOI.object({
+    username: JOI.string()
+        .alphanum()
+        .min(3)
+        .max(30)
+        .required(),
+
+    password: JOI.string()
+        .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')),
+
+    repeat_password: JOI.ref('password'),
+
+    access_token: [
+        JOI.string(),
+        JOI.number()
+    ],
+
+    birth_year: JOI.number()
+        .integer()
+        .min(1900)
+        .max(2013),
+
+    email: JOI.string()
+        .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
+})
+    .with('username', 'birth_year')
+    .xor('password', 'access_token')
+    .with('password', 'repeat_password');
+
+
+schema.validate({ username: 'abc', birth_year: 1994 });
+// -> { value: { username: 'abc', birth_year: 1994 } }
+
+schema.validate({});
+// -> { value: {}, error: '"username" is required' }
+
+// Also -
+
+try {
+    const value = await schema.validateAsync({ username: 'abc', birth_year: 1994 });
 }
-getValueFromObject(user, ["address", "state"]);//to get value of `state` key inside `address` object
-getValueFromObject(user, ["address", "phones","primary"])////to get value of `primary` key inside `phone` object inside `address`
-
-isKeyExistsNested(user, "address", "phones","primary");// to check if key `primary` exists in this object or not
-
+catch (err) { }
 ```
-## Available methods
-- **isEmptyArray**: To check if array is empty or not
-- **isString**: To check if value is string or not
-- **isNumeric**: To check string is numeric type 
-- **isValidEmail**: To check email is valid or not
-- **isAlphabet**: To check if string contain alphabet only
-- **isAlphaNumericOnly**: To check if string contains alphabet and numeric as well
-- **isSpecialCharAlphaNumeric**: To check if string contains alphabet with combination of number and special characters
-- **isUndefined**: To check if variable is undefined
-- **isNull**: To check if variable is null
-- **isBoolean**: To check if variable boolean 
-- **isArray**: To check if variable is an array
-- **sanitizeString**: To get sanitized version of value
-- **toInt**: To parse in integer format
-- **toFloat**: To parse in floating point format
-- **toDate**: To parse in date type
-- **isURL**: To check if a URL is valid or not
-- **isValidNumber**: To check valid numnber
-- **isValidLatLong**: To check valid latitude and longitude points
-- **isStrongPassword**: To check string password complexity
-- **isMediumPassword**: To check medium password complexity
-- **isDate**: To check if a value is date
-- **isObject**: To check if a value is object
-- **isKeyExists**: To check if a particular key is exists in an object or not(not in nested object)
-- **isKeyExistsNested**: To check if a particular key is exists in an object or not(in nested object)
-- **getValueFromObject**: To get value of a key from a nested object
+
+## Other example
+```tsx
+const Joi = = require("joi-sqlinjector-validator");
+
+const schema = Joi.object()
+  .keys({
+    name: Joi.string()
+      .min(3)
+      .max(40)
+      .required(),
+    age: Joi.number()
+      .integer()
+      .min(16)
+  });
+
+  const {
+    error
+  } = schema.validate({name:"test", age:15});
+  if (error) {
+   console.log("validation error", error.details)
+  } else {
+    console.log("validation passed")
+  }
+```
 
 ## Contributing
 
