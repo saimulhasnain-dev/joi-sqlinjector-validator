@@ -1,6 +1,6 @@
 {
   "name": "joi-sql-injector-validator",
-  "version": "1.0.2",
+  "version": "1.1.2",
   "description": "Joi SQL Injection Validator is a lightweight npm library designed to validate SQL injection attacks in user input using Joi, a popular validation library for Node.js. This library provides a set of pre-built Joi validation schemas for various types of user input such as strings, numbers, dates, and arrays that can be easily integrated into any Node.js project.",
   "main": "index.js",
   "scripts": {
