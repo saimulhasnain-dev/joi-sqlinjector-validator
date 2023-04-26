@@ -1,8 +1,8 @@
 This is a lightweight npm library designed to validate SQL injection attacks in user input
 ![npm version](https://img.shields.io/npm/v/input-validator?color=green&label=npm&style=flat-square)
-![size](https://img.shields.io/bundlephobia/min/joi-sqlinjector-validator)
+![size](https://img.shields.io/bundlephobia/min/joi-sql-injector-validator)
 
-# joi-sqlinjector-validator
+# joi-sql-injector-validator
 > Joi SQL Injection Validator is a lightweight npm library designed to validate SQL injection attacks in user input using Joi, a popular validation library for Node.js. This library provides a set of pre-built Joi validation schemas for various types of user input such as strings, numbers, dates, and arrays that can be easily integrated into any Node.js project.
 
 ## Prerequisites
@@ -24,11 +24,10 @@ These instructions will help you to install this package in your project to perf
 
 ## How to use
 
-```tsx
-This **joi-sqlinjector-validator** package includes all available validation method which is available here 
-JOI Official doc- https://joi.dev/api/?v=17.9.1  
+> This **joi-sql-injector-validator** package includes all available validation method which is available here 
+JOI Official doc at - https://joi.dev/api/  
 along with more powerful validation sqlInjectionFilter() for avoiding SQL Injection attacks
-```
+
 ## Installation
 
 **BEFORE YOU INSTALL:** please read the [prerequisites](#prerequisites)
@@ -37,19 +36,19 @@ Start with installation of package in your project:
 
 ```sh
 $ cd PROJECT
-$ npm i joi-sqlinjector-validator
+$ npm i joi-sql-injector-validator
 ```
 
 After successful installation of package you need to import package in your file:
 To import complete package in once
 
 ```sh
-$ import JOI from 'joi-sqlinjector-validator';
+$ import JOI from 'joi-sql-injector-validator';
 ```
 ## SQL Injection validation example
 
 ```tsx
-const Joi = = require("joi-sqlinjector-validator");
+const Joi = = require("joi-sql-injector-validator");
 
 const schema = Joi.object()
   .keys({
@@ -78,7 +77,7 @@ const schema = Joi.object()
 ## Other Examples
 
 ```tsx
-import JOI from 'joi-sqlinjector-validator';
+import JOI from 'joi-sql-injector-validator';
 
 const schema = JOI.object({
     username: JOI.string()
@@ -126,7 +125,7 @@ catch (err) { }
 
 ## Other example
 ```tsx
-const Joi = = require("joi-sqlinjector-validator");
+const Joi = = require("joi-sql-injector-validator");
 
 const schema = Joi.object()
   .keys({
