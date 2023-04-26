@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/saimulhasnain-dev/joi-sql-injector-validator.git"
+    "url": "git+https://github.com/saimulhasnain-dev/joi-sqlinjector-validator"
   },
   "keywords": [
     "joi",
