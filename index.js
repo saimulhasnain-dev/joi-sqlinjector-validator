@@ -23,4 +23,4 @@ function sqlInjectionFilter (joi) {
 }
 
 const JOI = require('joi');
-JOI.extend(sqlInjectionFilter);
+export default JOI.extend(sqlInjectionFilter);
